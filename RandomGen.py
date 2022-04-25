@@ -89,5 +89,5 @@ def RandomGeneration(layout):
             else:
                 print('# ', end='')
         print('')
-    layout = Gen.level
+    layout[0] = Gen.level
         
