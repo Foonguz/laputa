@@ -17,16 +17,20 @@ def RandomGeneration(layout):
     
     Gen.amountOfRooms = random.randrange(10)
     
-    Gen.startPointXY[0] = random.randrange(20)
-    Gen.startPointXY[1] = random.randrange(20)
+    Gen.startPointXY[0] = copy.deepcopy(random.randrange(19))
+    Gen.startPointXY[1] = copy.deepcopy(random.randrange(20))
     
-    Gen.startPoint = int((float(Gen.startPointXY[0]) * 20 - 20) + float(Gen.startPointXY[1]))
+    Gen.startPoint = int((float(Gen.startPointXY[0]) * 20) + float(Gen.startPointXY[1]))
+    print(Gen.startPointXY[0] * 20 + Gen.startPointXY[1])
+    
     Gen.corridor = [copy.deepcopy(Gen.startPointXY[0]), copy.deepcopy(Gen.startPointXY[1])]
     
     for x in range(400):
        Gen.level.append('')
+       layout[1].append('')
        if(x == Gen.startPoint):
            Gen.level[x] = 'true'
+           layout[1][x] = 'true'
     
     for x in range(5):   
         while(Gen.bigRooms > 0):
@@ -34,7 +38,7 @@ def RandomGeneration(layout):
             Gen.levelOld = copy.deepcopy(Gen.level)
             for x in range(400):
                     if(x < 380):
-                        if(Gen.levelOld[x + 20] == 'true'):
+                        if(Gen.levelOld[x + 20] == 'true' and random.randrange(10) < 7):
                             Gen.level[x] = 'true'
                             Gen.bigRooms -= 1
                             
@@ -49,34 +53,41 @@ def RandomGeneration(layout):
                             Gen.bigRooms -= 1
                             
                     if((x/10).is_integer() == False):
-                        if(Gen.levelOld[x - 1] == 'true' and random.randrange(11) < 7):
+                        if(Gen.levelOld[x - 1] == 'true' and random.randrange(10) < 7):
                             Gen.level[x] = 'true'
                             Gen.bigRooms -= 1
                             
         while(Gen.madeCorridors == False):
             
-            Gen.level[Gen.corridor[0] * 20 - 20 + Gen.corridor[1]] = 'true'
+            Gen.level[Gen.corridor[0] * 20 + Gen.corridor[1]] = 'true'
             
             if(Gen.startPointXY[0] > Gen.corridor[0]):
                 Gen.corridor[0] += 1
+                Gen.level[Gen.corridor[0] * 20 + Gen.corridor[1]] = 'true'
             if(Gen.startPointXY[0] < Gen.corridor[0]):
                 Gen.corridor[0] -= 1
+                Gen.level[Gen.corridor[0] * 20 + Gen.corridor[1]] = 'true'
             if(Gen.startPointXY[1] > Gen.corridor[1]):
                 Gen.corridor[1] += 1
+                Gen.level[Gen.corridor[0] * 20 + Gen.corridor[1]] = 'true'
             if(Gen.startPointXY[1] < Gen.corridor[1]):
                 Gen.corridor[1] -= 1
+                Gen.level[Gen.corridor[0] * 20 + Gen.corridor[1]] = 'true'
             if(Gen.corridor[0] == Gen.startPointXY[0] and Gen.corridor[1] == Gen.startPointXY[1]):
-                Gen.madeCorridors = True
-                            
+                Gen.madeCorridors = True    
+                
+            
         Gen.bigRooms = 10
         
         while(Gen.level[Gen.startPoint] == 'true'):
-            Gen.startPointXY[0] = random.randrange(20)
-            Gen.startPointXY[1] = random.randrange(20)
+            Gen.startPointXY[0] = copy.deepcopy(random.randrange(19))
+            Gen.startPointXY[1] = copy.deepcopy(random.randrange(20))
             
             Gen.startPoint = Gen.startPointXY[0] * 20 - 20 + Gen.startPointXY[1]
-            
+            layout[1][Gen.startPoint] = 'true'
+             
         Gen.level[Gen.startPoint] = 'true'
+        
             
         Gen.madeCorridors = False
         

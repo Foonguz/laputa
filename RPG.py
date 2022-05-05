@@ -19,6 +19,7 @@ class Time:
     
 class AttackMode: 
     attacking = True 
+    endAttack = 3
 
 class Player:
     X = [False, False, 400]
@@ -51,6 +52,11 @@ def inMenu():
         if(event.type == pygame.KEYDOWN):
             if(event.key == pygame.K_e):
                 AttackMode.attacking = False
+                AttackMode.endAttack -= 1
+            if(AttackMode.endAttack <= 0):
+                AttackMode.attacking = True
+                GetOut.outOfPlayMode = True
+                
 
 def InFight():
     
@@ -84,5 +90,5 @@ def InFight():
             Movement(Player.X, Player.Y, True)
             BulletMove(Player.X, Player.Y, Bullet.bulletStorage)
             
-            
+        
         LoadSprites(Sprites.RpgPlayer, Sprites.main, Sprites.enemy, Sprites.enemyBullet, Sprites.attackButton, Player.X, Player.Y, Bullet.bulletStorage, AttackMode.attacking)
