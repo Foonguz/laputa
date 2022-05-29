@@ -5,6 +5,7 @@ from SpritesOfThings import Sprites
 from RandomGen import RandomGeneration
 from Cutscene import Scene 
 from pygame import mixer
+from End import Ended
 
 #this script is the main overworld
 
@@ -49,6 +50,7 @@ class PlayMode:
     groundIs = [0, 0]
     everything = True
     goneThrough = -1
+    whenBoss = 2
 
 class Music:
     musicPlayed = False
@@ -75,25 +77,25 @@ testEnemy = Enemy(0, 0, False, False)
 #defs are here
 #this one loads all sprites
 def LoadSprites(main, enemy, ground, stairs, ferin, OX, OY, grounIs, EX, EY, PX, PY, layout, groundIs):
-    
-    for y in range(20):
-        for x in range(20):
-            
-            #sees if a ground tile is true, if it is it makes the ground
-            if(layout[0][y*20+x] == 'true'):
-                screen.blit(ground, (x * 80 - groundIs[0] * 80 + 40, y * 60 - groundIs[1] * 60 + 30))
-            #does the same but with enemy
-            
-            if(layout[1][y*20+x] == 'true'):
-                screen.blit(stairs,(x*80 - groundIs[0] * 80 + 40, y*60 - groundIs[1] * 60 + 30))
+    if(PlayMode.everything):
+        for y in range(20):
+            for x in range(20):
                 
-            screen.blit(enemy, (testEnemy.X * 80 - grounIs[0] * 80, testEnemy.Y * 60 - groundIs[1] * 60))
-    #puts the player model in the middle of the screen
-    
-    screen.blit(ferin, (PX + 20, PY - 35))
-    screen.blit(main, (OX[2] + 20, OY[2] - 35))
-    if(PY > OY[2]): 
+                #sees if a ground tile is true, if it is it makes the ground
+                if(layout[0][y*20+x] == 'true'):
+                    screen.blit(ground, (x * 80 - groundIs[0] * 80 + 40, y * 60 - groundIs[1] * 60 + 30))
+                #does the same but with enemy
+                
+                if(layout[1][y*20+x] == 'true'):
+                    screen.blit(stairs,(x*80 - groundIs[0] * 80 + 40, y*60 - groundIs[1] * 60 + 30))
+                    
+                screen.blit(enemy, (testEnemy.X * 80 - grounIs[0] * 80, testEnemy.Y * 60 - groundIs[1] * 60))
+        #puts the player model in the middle of the screen
+        
         screen.blit(ferin, (PX + 20, PY - 35))
+        screen.blit(main, (OX[2] + 20, OY[2] - 35))
+        if(PY > OY[2]): 
+            screen.blit(ferin, (PX + 20, PY - 35))
             
 #makes the screen
 screen = pygame.display.set_mode((800, 600))
@@ -159,15 +161,25 @@ while(PlayMode.everything):
     clock = pygame.time.Clock()
     while(running):
         
+        #this is used to play music
+        if(Music.musicPlayed == False):
+            mixer.music.load("CaveTheme.mp3")
+            mixer.music.play(-1)
+            Music.musicPlayed = True
+            
+        #this starts the cutscenes
         if(Cut.cutSceneStart): 
             Scene(Cut.whichScene)
             Cut.whichScene += 1
             Cut.cutSceneStart = False
-            PlayMode.goneThrough += 1
-        #if(Music.musicPlayed == False):
-            #mixer.music.load("CaveTheme.mp3")
-            #mixer.music.play(-1)
-            #Music.musicPlayed = True
+            
+            #this checks if the player should encounter the boss, in which case they go to the boss cutscene, it also ends the game when finished with the boss
+            if(PlayMode.goneThrough == PlayMode.whenBoss):
+                PlayMode.everything = False
+                running = False
+                playerOver.isMade = True
+                InFight(True)
+
             
         clock.tick(60)
     
@@ -216,7 +228,7 @@ while(PlayMode.everything):
        
         #sees if player and enemy touch
         if(PlayMode.groundIs[0] == testEnemy.X -5 and PlayMode.groundIs[1] == testEnemy.Y-5):
-            InFight()
+            InFight(False)
             testEnemy.X = 200
             testEnemy.hasFought = True
             Music.musicPlayed = False
@@ -226,8 +238,9 @@ while(PlayMode.everything):
             testEnemy.hasFought = False
             Lay.levelAgain = True
             PlayMode.goneThrough += 1
-        if(PlayMode.goneThrough == 1):
+        if(PlayMode.goneThrough == PlayMode.whenBoss):
             Cut.cutSceneStart = True
     
-            
+Ended()            
+
         

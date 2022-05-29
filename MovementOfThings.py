@@ -1,5 +1,6 @@
 import pygame
 from pygame import *
+from End import Ended
 clock = pygame.time.Clock()
 
 #this script moves the player bullet in defense mode
@@ -8,12 +9,13 @@ class Rects:
     #these are the rectangles made for different entities
     playerRect = Rect(0, 0, 32, 32)
     box = Rect(0, 0, 250, 200)
-    bullet = Rect(0,0,32,32)
+    bullet = Rect(0,0,1,1)
     
     
-def Movement(X, Y, isFighting):  
+def Movement(X, Y, isFighting, damage, bulletStorage):  
     #clock used for fps
     clock.tick(60)
+    
     
     for event in pygame.event.get():
         
@@ -41,6 +43,7 @@ def Movement(X, Y, isFighting):
     #places the rects at thier coresponding sprite
     Rects.playerRect = Rect(X[2], Y[2], 32, 32)
     Rects.box = Rect(370, 280, 200, 250)
+    Rects.bullet = Rect(bulletStorage[0][0] + 16, bulletStorage[0][1] + 16, 1, 1)
     
     #moves the player if its in defense mode
     if(isFighting == False): 
@@ -70,5 +73,10 @@ def Movement(X, Y, isFighting):
             X[2] += 5
             if(Rects.playerRect.colliderect(Rects.box) == 0 and X[2] > 570):
                 X[2] += -5
+        
+        if(Rects.playerRect.colliderect(Rects.bullet)):
+            damage += 1
+            print(damage)
+            Ended()
 
         

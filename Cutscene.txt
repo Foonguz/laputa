@@ -10,6 +10,14 @@ Ferin: I wonder what we'll find down there
 Lye: Whatever it is we'll probably not be alone
 prepare for a fight
 end
-yo
-ey
+Lye: This seems to be it
+Ferin: Looks rather, threatening
+Lye: Whatever is hiding here we can handle it, now let’s take this thing and leave 
+Lye: Ferin? 
+Lye: Ahhh! 
+end
+Lye: Ferin! Are you okay?
+Ferin: I'm... Fine
+but the object we came for isn't
+Lye: Let's just get out of here
 end

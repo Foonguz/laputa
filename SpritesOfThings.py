@@ -11,4 +11,10 @@ class Sprites:
     ground = pygame.image.load('floor.png')
     stairs  = pygame.image.load('Stairs.png')
     ferin = pygame.image.load('Ferin.png')
-    
+    evilFerin = pygame.image.load('EvilFerin.png')
+    evilFerinDestoryed = pygame.image.load('EvilFerinDestroyed.png')
+    ferinDown = pygame.image.load('ferinDown.png')
+    brokenMask = pygame.image.load('brokenMask.png')
+    moth = pygame.image.load('HypocritaMeres.png')
+    cutsceneFerin = pygame.image.load('CutsceneFerin.png')
+    TBC = pygame.image.load('ToBeContinued.png')
